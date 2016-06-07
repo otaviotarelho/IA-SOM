@@ -145,7 +145,7 @@ public class SOM {
         
         int i = 0; 
         while(i < 25){
-          System.out.println("Vencedor:" + Arrays.toString(tdBMU[0]));
+          System.out.println("Vencedor:" + (tdBMU[i][0] + 1));
           i++;
         }
     }
