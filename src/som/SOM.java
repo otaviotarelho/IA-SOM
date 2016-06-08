@@ -5,14 +5,15 @@
  */
 package som;
 
-import java.lang.Math;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Random;
+
 /**
  *
  * @author otaviotarelho
  */
+
 public class SOM {
 
     private static double[][] w = new double[4][2];
@@ -45,12 +46,12 @@ public class SOM {
                 {125.0, 1.80},
                 {120.0, 1.60}};
 
-    private static int[][] neuron = {{1, 2},{3, 4}}; // neuronios e sua distancia
-    private static int  TIME = 1000 + (500 * w.length); // total maximo de iterações
+    private static int[][] neuron = {{0, 1}, {2, 3}}; // neuronios e sua distancia
+    private static int TIME = 1000 + (500 * w.length); // total maximo de iterações
     private static int FTEMPO = 10 * TIME;
     private static int[][] tdBMU = new int[25][3]; // Neuronio vencedor , X, Y;
-    private static int DIMENSION = (int) Math.sqrt(neuron.length);
-    
+    private static final int DIMENSION = 2;
+
     public static void weightsInit() {
         double[][] newWeights = new double[4][2];
         double verify;
@@ -70,14 +71,13 @@ public class SOM {
 
     public static void BMU(int i) {
         double menor = 0.0;
-        
-        
+
         for (int j = 0; j < w.length; j++) {
-            
+
             double distance = 0.0;
             //calculate euclidean distance
             distance = euclideanDistance(_td[i][0], _td[i][1], w[j][0], w[j][1]);
-            
+
             if (j == 0) {
                 menor = distance;
                 tdBMU[i][0] = j;
@@ -87,15 +87,13 @@ public class SOM {
                 tdBMU[i][0] = j;
             } // else weights
         }
-        
-        
+
         //Simplify it as best as possible
-        
         //update BMU
         updateWeights(tdBMU[i][0], i);
 
         //update Neighbors
-        switch(tdBMU[i][0]){
+        switch (tdBMU[i][0]) {
             case 0:
                 updateWeightsNeighbors(1, i);
                 updateWeightsNeighbors(2, i);
@@ -113,8 +111,7 @@ public class SOM {
                 updateWeightsNeighbors(2, i);
                 break;
         }
-   
-        
+
     }
 
     public static double euclideanDistance(double x1, double x2, double y1, double y2) {
@@ -122,32 +119,32 @@ public class SOM {
     }
 
     public static void updateWeights(int i, int d) {
-        for(int j = 0; j < 2; j++){
-            w[i][j]  += trainingRate * (_td[d][j]-w[i][j]);
+        for (int j = 0; j < 2; j++) {
+            w[i][j] += trainingRate * (_td[d][j] - w[i][j]);
         }
     }
-    
+
     public static void updateWeightsNeighbors(int i, int d) {
-        for(int j = 0; j < 2; j++){
-            w[i][j]  += trainingRate * trainingActualRate * (_td[d][j]-w[i][j]);
+        for (int j = 0; j < 2; j++) {
+            w[i][j] += trainingRate * trainingActualRate * (_td[d][j] - w[i][j]);
         }
     }
-    
-    public static void changeFactor(int it){
+
+    public static void changeFactor(int it) {
         trainingActualRate = trainingRate * Math.exp(-(it / FTEMPO));
     }
-    
+
     public static void main(String[] args) {
         int e = 0;
         weightsInit();
-        
+
         System.out.println(Arrays.toString(w[0]));
         System.out.println(Arrays.toString(w[1]));
         System.out.println(Arrays.toString(w[2]));
         System.out.println(Arrays.toString(w[3]));
-        
-        while(e < TIME){
-            
+
+        while (e < TIME) {
+
             for (int i = 0; i < _td.length; i++) {
                 BMU(i);
                 setCoordinates(i);
@@ -155,32 +152,34 @@ public class SOM {
             changeFactor(e);
             e++;
         }
-        
-        
+
         System.out.println(Arrays.toString(w[0]));
         System.out.println(Arrays.toString(w[1]));
         System.out.println(Arrays.toString(w[2]));
         System.out.println(Arrays.toString(w[3]));
-        
-        int i = 0; 
-        while(i < 25){
-          System.out.println("Vencedor:" + (tdBMU[i][0] + 1) + " - X: "+tdBMU[i][1]+" Y: "+tdBMU[i][2]);
-          i++;
+
+        int i = 0;
+        while (i < 25) {
+            System.out.println("Vencedor:" + (tdBMU[i][0] + 1) + " - X: " + tdBMU[i][1] + " Y: " + tdBMU[i][2]);
+            i++;
         }
     }
-    
+
     //N sei o que esta acontecendo
-    public static void setCoordinates(int it){
-        for(int i = 0; i < DIMENSION; i++){
-            for(int j = 0; j< DIMENSION; j++){
-                if(tdBMU[it][0] == neuron[i][j]){
+    public static void setCoordinates(int it) {
+        for (int i = 0; i < DIMENSION; i++) {
+            for (int j = 0; j < DIMENSION; j++) {
+
+                if (tdBMU[it][0] == neuron[i][j]) {
+
                     tdBMU[it][1] = i;
                     tdBMU[it][2] = j;
+
                     break;
                 }
-                System.out.println(tdBMU[it][0] +" "+neuron[i][j]);
+
             }
         }
     }
-    
+
 }
