@@ -20,6 +20,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 /**
  *
@@ -175,11 +176,12 @@ public class SOM {
             System.out.println("Vencedor:" + (tdBMU[i][0] + 1) + " - X: " + tdBMU[i][1] + " Y: " + tdBMU[i][2]);
             i++;
         }
-        
+        XYSeries series = new XYSeries("Neuronio");
         XYSeriesCollection ds = new XYSeriesCollection();
         
         for(int f = 0; f < tdBMU[0].length; f++){
             ds.addValue(tdBMU[f][1], "Neuronio " + tdBMU[f][0], "" +tdBMU[f][2]);
+            series.add(f, f);
         }
         
         JFreeChart grafico = ChartFactory.createLineChart("Self Organizing Maps", "X", "Y", ds, PlotOrientation.VERTICAL, true, true, false);
