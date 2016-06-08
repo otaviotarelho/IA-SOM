@@ -5,10 +5,22 @@
  */
 package som;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Random;
-
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeriesCollection;
 /**
  *
  * @author otaviotarelho
@@ -134,7 +146,7 @@ public class SOM {
         trainingActualRate = trainingRate * Math.exp(-(it / FTEMPO));
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         int e = 0;
         weightsInit();
 
@@ -163,9 +175,27 @@ public class SOM {
             System.out.println("Vencedor:" + (tdBMU[i][0] + 1) + " - X: " + tdBMU[i][1] + " Y: " + tdBMU[i][2]);
             i++;
         }
+        
+        XYSeriesCollection ds = new XYSeriesCollection();
+        
+        for(int f = 0; f < tdBMU[0].length; f++){
+            ds.addValue(tdBMU[f][1], "Neuronio " + tdBMU[f][0], "" +tdBMU[f][2]);
+        }
+        
+        JFreeChart grafico = ChartFactory.createLineChart("Self Organizing Maps", "X", "Y", ds, PlotOrientation.VERTICAL, true, true, false);
+        JFreeChart g = ChartFactory.createScatterPlot("Self Organizing Maps", "X", "Y", ds, PlotOrientation.VERTICAL, true, true, false);
+        
+        JFrame frame = new JFrame("IMC SOM");
+        frame.add(getPanel(grafico));
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
+        
     }
-
-    //N sei o que esta acontecendo
+    public static JPanel getPanel(JFreeChart grafico) {
+        return new ChartPanel(grafico);
+    }
+    
     public static void setCoordinates(int it) {
         for (int i = 0; i < DIMENSION; i++) {
             for (int j = 0; j < DIMENSION; j++) {
