@@ -5,27 +5,20 @@
  */
 package som;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.lang.reflect.Array;
-import java.util.Arrays;
 import java.util.Random;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
-import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 /**
  *
- * @author otaviotarelho
+ * @author Leonardo Oliveira, Mariana Bispo, Otavio Tarelho
  */
 public class SOM {
 
@@ -215,22 +208,23 @@ public class SOM {
 
         }
 
-//        XYSeries series = new XYSeries("Neuronio");
-//        XYSeriesCollection ds = new XYSeriesCollection();
-//        
-//        for(int f = 0; f < tdBMU[0].length; f++){
-//            ds.addValue(tdBMU[f][1], "Neuronio " + tdBMU[f][0], "" +tdBMU[f][2]);
-//            series.add(f, f);
-//        }
-//        
+        
+        XYSeriesCollection ds = new XYSeriesCollection();
+        
+        for(int f = 0; f < tdBMU.length -1; f++){
+            XYSeries series = new XYSeries((f + 1)+ "- Neuronio " + (tdBMU[f][0] + 1));
+            series.add(tdBMU[f][0], _td[f][0]);
+            ds.addSeries(series);
+        }
+        
 //        JFreeChart grafico = ChartFactory.createLineChart("Self Organizing Maps", "X", "Y", ds, PlotOrientation.VERTICAL, true, true, false);
-//        JFreeChart g = ChartFactory.createScatterPlot("Self Organizing Maps", "X", "Y", ds, PlotOrientation.VERTICAL, true, true, false);
-//        
-//        JFrame frame = new JFrame("IMC SOM");
-//        frame.add(getPanel(grafico));
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        frame.pack();
-//        frame.setVisible(true);
+        JFreeChart g = ChartFactory.createScatterPlot("Self Organizing Maps", "X", "Y", ds, PlotOrientation.VERTICAL, true, true, false);
+        
+        JFrame frame = new JFrame("IMC SOM");
+        frame.add(getPanel(g));
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
     }
 
     public static JPanel getPanel(JFreeChart grafico) {
